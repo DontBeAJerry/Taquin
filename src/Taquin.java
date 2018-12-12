@@ -30,13 +30,14 @@ public class Taquin {
 	/**
 	 * Copie d'un taquin
 	 */
-	private static Taquin taquinSucc(Taquin t, Case c) {
+	public Taquin taquinSucc(Taquin t, Case c) {
 		Taquin newT = new Taquin();
 		for(int i = 0; i<3; i++) {
 			for(int j = 0; j<3; j++) {
 				newT.grille[i][j] = new Case(t.getCase(i, j));
 			}
 		}
+		newT.setSaveCaseVide(t.getSaveCaseVide());
 		newT.setProfondeur(t.getProfondeur()+1);
 		newT.permut(c);
 		
@@ -64,8 +65,8 @@ public class Taquin {
 	}
 	
 	/** 
-	 * Crée le premier taquin non aléatoire
-	 * Permet de tester avec un taquin connu à l'avance
+	 * Crï¿½e le premier taquin non alï¿½atoire
+	 * Permet de tester avec un taquin connu ï¿½ l'avance
 	 */
 	private void createFirstTaquin() {
 		int k = 1; 
@@ -97,7 +98,7 @@ public class Taquin {
 				listDir.add(Directions.BAS);
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		try {
@@ -105,7 +106,7 @@ public class Taquin {
 				listDir.add(Directions.HAUT);
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		try {			
@@ -113,7 +114,7 @@ public class Taquin {
 				listDir.add(Directions.GAUCHE);
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		try {
@@ -121,7 +122,7 @@ public class Taquin {
 				listDir.add(Directions.DROITE);
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 			
 		System.out.println("Liste coups jouables : "+listDir);
@@ -131,7 +132,7 @@ public class Taquin {
 	}
 	
 	/**
-	 * Retourne la case associée à la direction donnée
+	 * Retourne la case associï¿½e ï¿½ la direction donnï¿½e
 	 */
 	private Case getCaseFromDirection(Directions dir) {
 		int x = this.getCaseVide().getX();
@@ -154,7 +155,7 @@ public class Taquin {
 	
 	/**
 	 * Permutte la case pleine et la case vide
-	 * Simule un coup joué
+	 * Simule un coup jouï¿½
 	 * @param c case pleine
 	 */
 	private void permut(Case c) {
@@ -174,23 +175,24 @@ public class Taquin {
 	
 	/**
 	 * Recherche les coups jouables
-	 * Copie le taquin parent, et crée les taquins enfants suite aux différents coups jouables
-	 * Crée la liste des successeur
+	 * Copie le taquin parent, et crï¿½e les taquins enfants suite aux diffï¿½rents coups jouables
+	 * Crï¿½e la liste des successeur
 	 */
 	private void createSucc() {
-		//Pour chaque coup jouable, on crée le taquin correspondant
+		//Pour chaque coup jouable, on crï¿½e le taquin correspondant
 		for (Directions dir : this.listCoupJouable()) {
 			System.out.println("Direction : "+dir);
-			//On récupère la case correspondante au coup jouable
+			//On rï¿½cupï¿½re la case correspondante au coup jouable
 			Case c = this.getCaseFromDirection(dir);
 			if (c != null) {
 				System.out.println("Oui" + c.getX() + c.getY() + c.getVal());
 				this.affiche();
-				//Création du taquin successeur, avec permutation des cases
-				Taquin tSucc = Taquin.taquinSucc(this, c);
+				//Crï¿½ation du taquin successeur, avec permutation des cases
+				Taquin tSucc = new Taquin();
+				tSucc = tSucc.taquinSucc(this, c);
 				
-				//Ajout du taquin à la liste des successeurs
-				//this.successeurs.add(tSucc);
+				//Ajout du taquin ï¿½ la liste des successeurs
+				this.successeurs.add(tSucc);
 				tSucc.affiche();
 				
 				System.out.println("****************");
@@ -204,9 +206,7 @@ public class Taquin {
 	}
 	
 	public void setCase(Case c, int x, int y) {
-		this.grille[x][y].setVal(c.getVal()); 
-		this.grille[x][y].setX(c.getX());
-		this.grille[x][y].setY(c.getY());
+		this.grille[x][y].setVal(c.getVal());
 		}
 	
 	public Case getCaseVide() {

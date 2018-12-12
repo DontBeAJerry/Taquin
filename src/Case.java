@@ -1,7 +1,7 @@
 
 public class Case {
 
-	//Coordonnées de la case
+	//Coordonnï¿½es de la case
 	private int x; 
 	private int y;
 	//Valeur de la case
