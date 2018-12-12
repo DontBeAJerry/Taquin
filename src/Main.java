@@ -5,8 +5,8 @@ public class Main {
 		// TODO Auto-generated method stub
 		Taquin t = new Taquin();
 		t.init();
-		
-		
+
+
 	}
 
 }
