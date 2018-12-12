@@ -185,8 +185,8 @@ public class Taquin {
 			//On r�cup�re la case correspondante au coup jouable
 			Case c = this.getCaseFromDirection(dir);
 			if (c != null) {
-				System.out.println("Oui" + c.getX() + c.getY() + c.getVal());
-				this.affiche();
+				//Affiche le Taquin Parent
+				//this.affiche();
 				//Cr�ation du taquin successeur, avec permutation des cases
 				Taquin tSucc = new Taquin();
 				tSucc = tSucc.taquinSucc(this, c);
