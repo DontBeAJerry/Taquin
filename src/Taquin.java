@@ -21,7 +21,7 @@ public class Taquin {
 	 */
 	public void init(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
 		this.createFirstTaquin();
-		System.out.println("Voici le taquin originel");
+		System.out.println("Vesseurs; oici le taquin originel");
 		this.affiche();
 
 		this.createSucc();
@@ -201,8 +201,19 @@ public class Taquin {
 		}
 
 	}
-
-	boolean isEtatOuvert(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
+	
+	void comparaison (ArrayList<Taquin> ouvert , ArrayList<Taquin> ferme) {
+		//TODO une fonction qui appel isEtatFerme(O,F) puis traite les cas différents
+		//
+	}
+	
+	/**
+	 * Test si le taquin est deja existant dans la liste de taquin fermé
+	 * @param ouvert
+	 * @param ferme
+	 * @return
+	 */
+	boolean isEtatFerme(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
 		for (Taquin t : ferme) {
 			//TODO Vérifier l'egalite
 			if (!gridIsEquals(this.grille, t.grille))
@@ -212,7 +223,14 @@ public class Taquin {
 		return true;
 
 	}
-
+	
+	/**
+	 * Permet de comparer les grilles de deux taquins pour savoir si elles sont 
+	 * égales
+	 * @param grille
+	 * @param grille2
+	 * @return
+	 */
 	private boolean gridIsEquals(Case[][] grille, Case[][] grille2) {
 
 		for (int i = 0; i < grille.length; i++) {

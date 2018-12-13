@@ -10,10 +10,10 @@ public class Main {
 
 		//Taquin à resoudre, etat initiale
 		Taquin t = new Taquin();
-		listeEtatFerme.add(t);
+		listeEtatOuvert.add(t);
 		t.init(listeEtatOuvert, listeEtatFerme);
 
-		System.out.println(t.isEtatOuvert(listeEtatOuvert,listeEtatFerme));
+		System.out.println(t.isEtatFerme(listeEtatOuvert,listeEtatFerme));
 
 
 	}
