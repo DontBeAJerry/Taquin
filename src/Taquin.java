@@ -45,7 +45,7 @@ public class Taquin {
 	}
 
 
-	private void affiche() {
+	public void affiche() {
 		System.out.println(" -----------");
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -85,14 +85,14 @@ public class Taquin {
 			}
 		}
 
-	/*
+
 		grille[2][1].setVal(8);
 		grille[2][2].setVal(7);
-		*/
+
 
 		grille[0][0].setVal(6);
-		grille[0][1].setVal(5);
-		grille[0][2].setVal(1);
+		grille[0][1].setVal(1);
+		grille[0][2].setVal(5);
 		grille[1][0].setVal(7);
 		grille[1][1].setVal(4);
 		grille[1][2].setVal(8);
@@ -100,6 +100,17 @@ public class Taquin {
 		grille[2][1].setVal(3);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
+
+	/*	grille[0][0].setVal(1);
+		grille[0][1].setVal(2);
+		grille[0][2].setVal(3);
+		grille[1][0].setVal(4);
+		grille[1][1].setVal(0);
+		grille[1][2].setVal(6);
+		grille[2][0].setVal(7);
+		grille[2][1].setVal(5);
+		grille[2][2].setVal(8);
+		saveCaseVide = grille[1][1];*/
 	}
 
 	/**
@@ -183,7 +194,7 @@ public class Taquin {
 		this.setCase(saveCaseVide, c.getX(), c.getY());
 		this.setCase(tmp, saveCaseVide.getX(), saveCaseVide.getY());
 		this.setSaveCaseVide(this.grille[c.getX()][c.getY()]);
-		
+
 		/*
 		this.grille[c.getX()][c.getY()].setVal(0);
 		this.grille[saveCaseVide.getX()][saveCaseVide.getY()].setVal(tmp.getVal());
@@ -212,9 +223,7 @@ public class Taquin {
 				this.successeurs.add(tSucc);
 
 				//Ajout du taquin � la liste des etats ouverts
-				if(!tSucc.isEtatFerme(ferme)) {
-					ouvert.add(tSucc);
-				}
+				ouvert.add(tSucc);
 
 				//tSucc.affiche();
 				//System.out.println("****************");
@@ -271,7 +280,7 @@ public class Taquin {
 
 		for (int i = 0; i < grille.length; i++) {
 			for (int j = 0; j < grille.length; j++) {
-				if (grille[i][j] != grille2[i][j]) {
+				if (grille[i][j].getVal() != grille2[i][j].getVal()) {
 					return false;
 				}
 			}
@@ -316,32 +325,19 @@ public class Taquin {
 	 * @param listeEtatFerme
 	 * @return
 	 */
-	public boolean routine(ArrayList<Taquin> listeEtatOuvert, ArrayList<Taquin> listeEtatFerme , int i) {
+	public boolean routine(ArrayList<Taquin> listeEtatOuvert, ArrayList<Taquin> listeEtatFerme) {
 
-
-		if (!listeEtatOuvert.isEmpty()) {
-			Taquin t = listeEtatOuvert.get(0);
-			System.out.println(i);
-		t.affiche();
-
-			if (t.isSolution()) {
-					System.out.println("\nVoici la solution, pronfondeur"+t.getProfondeur()+" : ");
-					t.affiche();
-					return true;
-				} else if (t.isEtatFerme(listeEtatFerme)) {
-					listeEtatOuvert.remove(0);
-					return t.routine(listeEtatOuvert, listeEtatFerme,i+1);
-				} else {
-					t.createSucc(listeEtatOuvert, listeEtatFerme);
-					listeEtatFerme.add(t);
-					listeEtatOuvert.remove(0);
-					return t.routine(listeEtatOuvert, listeEtatFerme,i+1);
-				}
+		if (this.isSolution()) {
+			System.out.println("\nVoici la solution, pronfondeur"+this.getProfondeur()+" : ");
+			return true;
+		} else if (this.isEtatFerme(listeEtatFerme)) {
+			listeEtatOuvert.remove(0);
+		} else {
+			this.createSucc(listeEtatOuvert, listeEtatFerme);
+			listeEtatFerme.add(this);
+			listeEtatOuvert.remove(0);
 		}
 
-
 		return false;
-
 	}
-
 }

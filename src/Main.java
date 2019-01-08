@@ -15,15 +15,19 @@ public class Main {
 
 		t.init(listeEtatOuvert, listeEtatFerme);
 		listeEtatFerme.add(t);
+		int i = 0;
 
 		System.out.println(t.isEtatFerme(listeEtatFerme));
-
-
-		if(t.routine(listeEtatOuvert, listeEtatFerme,0)){
-			System.out.println("Ca marche");
-		}else{
-			System.out.println("Ca marche pas :(");
+		while(!listeEtatOuvert.isEmpty()) {
+			Taquin x = listeEtatOuvert.get(0);
+			if (x.routine(listeEtatOuvert, listeEtatFerme)){
+				x.affiche();
+				System.out.println("Ca marche");
+				listeEtatOuvert.clear();
+			}
+			i++;
 		}
+		System.out.println(i);
 
 
 	}
