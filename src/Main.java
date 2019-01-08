@@ -1,15 +1,17 @@
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		ArrayList<Taquin> listeEtatOuvert = new ArrayList<>();
-		ArrayList<Taquin> listeEtatFerme = new ArrayList<>();
+        PriorityQueue<Taquin> listeEtatOuvert = new PriorityQueue<Taquin>();
+        PriorityQueue<Taquin> listeEtatFerme = new PriorityQueue<>();
 
 		//Taquin à resoudre, etat initiale
 		Taquin t = new Taquin();
+
 
 		//Todo Vérifier Taquin Init n'est pas solution
 
@@ -19,7 +21,7 @@ public class Main {
 
 		//System.out.println(t.isEtatFerme(listeEtatFerme));
 		while(!listeEtatOuvert.isEmpty()) {
-			Taquin x = listeEtatOuvert.get(0);
+			Taquin x = listeEtatOuvert.poll();
 			if (x.routine(listeEtatOuvert, listeEtatFerme)){
 				x.afficheChemin();
 				listeEtatOuvert.clear();

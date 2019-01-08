@@ -1,27 +1,29 @@
 import java.time.Clock;
-import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.PriorityQueue;
 
-public class Taquin {
+public class Taquin implements Comparable<Taquin>{
 
 
 	private Case[][] grille;
-	private ArrayList<Taquin> successeurs;
+	private PriorityQueue<Taquin> successeurs;
 	private int profondeur;
 	private Case saveCaseVide;
+	int priority;
 	Taquin pere;
 
 
 	Taquin() {
 		this.profondeur = 0;
 		this.grille = new Case[3][3];
-		this.successeurs = new ArrayList<Taquin>();
+		this.successeurs = new PriorityQueue<Taquin>();
 	}
 
 	/**
 	 * Initialisation du premier taquin
 	 * Et lancement de la création des successeurs
 	 */
-	public void init(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
+	public void init(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme) {
 		this.createFirstTaquin();
 		System.out.println("Voici le taquin originel");
 		this.affiche();
@@ -85,7 +87,8 @@ public class Taquin {
 
 			}
 		}
-	this.pere = null;
+		this.pere = null;
+		this.priority = this.heuristiqueMalPlace();
 
 	/*
 		grille[0][0].setVal(3);
@@ -127,10 +130,10 @@ public class Taquin {
 	/**
 	 * Retourne la liste des coups jouables
 	 */
-	private ArrayList<Directions> listCoupJouable() {
+	private PriorityQueue<Directions> listCoupJouable() {
 		int x = this.getCaseVide().getX();
 		int y = this.getCaseVide().getY();
-		ArrayList<Directions> listDir = new ArrayList<Directions>();
+		PriorityQueue<Directions> listDir = new PriorityQueue<Directions>();
 
 		try {
 
@@ -219,7 +222,7 @@ public class Taquin {
 	 * Copie le taquin parent, et cr�e les taquins enfants suite aux diff�rents coups jouables
 	 * Cr�e la liste des successeur
 	 */
-	private void createSucc(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
+	private void createSucc(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme) {
 		//Pour chaque coup jouable, on cr�e le taquin correspondant
 		for (Directions dir : this.listCoupJouable()) {
 			//System.out.println("Direction : " + dir);
@@ -233,6 +236,8 @@ public class Taquin {
 				//Ajout du taquin � la liste des successeurs
 				this.successeurs.add(tSucc);
 				tSucc.pere = this;
+				this.priority = this.heuristiqueMalPlace();
+
 				//Ajout du taquin � la liste des etats ouverts
 				if(!tSucc.isEtatFerme(ferme))
 					ouvert.add(tSucc);
@@ -250,7 +255,7 @@ public class Taquin {
 		}
 		this.affiche();
 	}
-	void comparaison(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
+	void comparaison(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme) {
 		//TODO une fonction qui appel isEtatFerme(O,F) puis traite les cas différents
 		//
 	}
@@ -261,7 +266,7 @@ public class Taquin {
 	 * @param ferme
 	 * @return
 	 */
-	boolean isEtatFerme(ArrayList<Taquin> ferme) {
+	boolean isEtatFerme(PriorityQueue<Taquin> ferme) {
 		for (Taquin t : ferme) {
 			if (gridIsEquals(this.grille, t.grille))
 				return true;
@@ -284,6 +289,22 @@ public class Taquin {
 		}
 
 		return true;
+	}
+
+	private int nbMalPlace() {
+
+		int tmp = 1;
+		int compteur = 0;
+		for (int i = 0; i < this.grille.length; i++) {
+			for (int j = 0; j < this.grille.length; j++) {
+				if (this.grille[i][j].getVal() != tmp && tmp < (grille.length*grille.length)) {
+					compteur++;
+				}
+				tmp++;
+			}
+		}
+
+		return compteur;
 	}
 
 	/**
@@ -334,7 +355,7 @@ public class Taquin {
 		this.saveCaseVide = saveCaseVide;
 	}
 
-	public ArrayList<Taquin> getSuccesseurs() {
+	public PriorityQueue<Taquin> getSuccesseurs() {
 		return this.successeurs;
 	}
 
@@ -343,20 +364,31 @@ public class Taquin {
 	 * @param listeEtatFerme
 	 * @return
 	 */
-	public boolean routine(ArrayList<Taquin> listeEtatOuvert, ArrayList<Taquin> listeEtatFerme) {
+	public boolean routine(PriorityQueue<Taquin> listeEtatOuvert, PriorityQueue<Taquin> listeEtatFerme) {
 		//System.out.println("Profondeur : "+this.getProfondeur()+" : ");
 		if (this.isSolution()) {
 			System.out.println("\nVoici la solution, de profondeur "+this.getProfondeur()+" : ");
 			return true;
-		} else if (this.isEtatFerme(listeEtatFerme)) {
-			listeEtatOuvert.remove(this);
-		} else {
-			listeEtatOuvert.remove(this);
+		} else if (!this.isEtatFerme(listeEtatFerme) && !this.isEtatFerme(listeEtatOuvert)) {
 			this.createSucc(listeEtatOuvert, listeEtatFerme);
 			listeEtatFerme.add(this);
-
+			//TODO finir cas heuristique voir annexe perso-etis.ensean.fr
 		}
 
 		return false;
+	}
+
+	@Override
+	public int compareTo(Taquin o) {
+		if(this.priority > o.priority) {
+			return 1;
+		} else if(this.priority == o.priority){
+			return 0;
+		}
+		return -1;
+	}
+
+	private int heuristiqueMalPlace(){
+		return this.profondeur+this.nbMalPlace();
 	}
 }
