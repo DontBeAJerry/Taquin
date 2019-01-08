@@ -8,6 +8,7 @@ public class Taquin {
 	private ArrayList<Taquin> successeurs;
 	private int profondeur;
 	private Case saveCaseVide;
+	Taquin pere;
 
 
 	Taquin() {
@@ -84,24 +85,21 @@ public class Taquin {
 
 			}
 		}
+	this.pere = null;
 
-
-		grille[2][1].setVal(8);
-		grille[2][2].setVal(7);
-
-
-		grille[0][0].setVal(6);
-		grille[0][1].setVal(1);
-		grille[0][2].setVal(5);
-		grille[1][0].setVal(7);
-		grille[1][1].setVal(4);
-		grille[1][2].setVal(8);
-		grille[2][0].setVal(2);
-		grille[2][1].setVal(3);
+	/*
+		grille[0][0].setVal(3);
+		grille[0][1].setVal(4);
+		grille[0][2].setVal(8);
+		grille[1][0].setVal(5);
+		grille[1][1].setVal(7);
+		grille[1][2].setVal(6);
+		grille[2][0].setVal(1);
+		grille[2][1].setVal(2);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
 
-	/*	grille[0][0].setVal(1);
+		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
 		grille[0][2].setVal(3);
 		grille[1][0].setVal(4);
@@ -110,7 +108,20 @@ public class Taquin {
 		grille[2][0].setVal(7);
 		grille[2][1].setVal(5);
 		grille[2][2].setVal(8);
-		saveCaseVide = grille[1][1];*/
+		saveCaseVide = grille[1][1];
+	*/
+
+		grille[0][0].setVal(4);
+		grille[0][1].setVal(8);
+		grille[0][2].setVal(5);
+		grille[1][0].setVal(3);
+		grille[1][1].setVal(6);
+		grille[1][2].setVal(2);
+		grille[2][0].setVal(7);
+		grille[2][1].setVal(1);
+		grille[2][2].setVal(0);
+		saveCaseVide = grille[2][2];
+
 	}
 
 	/**
@@ -221,9 +232,10 @@ public class Taquin {
 
 				//Ajout du taquin � la liste des successeurs
 				this.successeurs.add(tSucc);
-
+				tSucc.pere = this;
 				//Ajout du taquin � la liste des etats ouverts
-				ouvert.add(tSucc);
+				if(!tSucc.isEtatFerme(ferme))
+					ouvert.add(tSucc);
 
 				//tSucc.affiche();
 				//System.out.println("****************");
@@ -232,6 +244,12 @@ public class Taquin {
 
 	}
 
+	public void afficheChemin(){
+		if(this.pere != null){
+			this.pere.afficheChemin();
+		}
+		this.affiche();
+	}
 	void comparaison(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
 		//TODO une fonction qui appel isEtatFerme(O,F) puis traite les cas différents
 		//
@@ -326,16 +344,17 @@ public class Taquin {
 	 * @return
 	 */
 	public boolean routine(ArrayList<Taquin> listeEtatOuvert, ArrayList<Taquin> listeEtatFerme) {
-
+		//System.out.println("Profondeur : "+this.getProfondeur()+" : ");
 		if (this.isSolution()) {
-			System.out.println("\nVoici la solution, pronfondeur"+this.getProfondeur()+" : ");
+			System.out.println("\nVoici la solution, de profondeur "+this.getProfondeur()+" : ");
 			return true;
 		} else if (this.isEtatFerme(listeEtatFerme)) {
-			listeEtatOuvert.remove(0);
+			listeEtatOuvert.remove(this);
 		} else {
+			listeEtatOuvert.remove(this);
 			this.createSucc(listeEtatOuvert, listeEtatFerme);
 			listeEtatFerme.add(this);
-			listeEtatOuvert.remove(0);
+
 		}
 
 		return false;

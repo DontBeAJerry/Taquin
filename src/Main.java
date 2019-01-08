@@ -17,17 +17,16 @@ public class Main {
 		listeEtatFerme.add(t);
 		int i = 0;
 
-		System.out.println(t.isEtatFerme(listeEtatFerme));
+		//System.out.println(t.isEtatFerme(listeEtatFerme));
 		while(!listeEtatOuvert.isEmpty()) {
 			Taquin x = listeEtatOuvert.get(0);
 			if (x.routine(listeEtatOuvert, listeEtatFerme)){
-				x.affiche();
-				System.out.println("Ca marche");
+				x.afficheChemin();
 				listeEtatOuvert.clear();
 			}
+
 			i++;
 		}
-		System.out.println(i);
 
 
 	}
