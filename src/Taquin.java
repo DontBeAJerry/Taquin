@@ -1,3 +1,4 @@
+import java.time.Clock;
 import java.util.ArrayList;
 
 public class Taquin {
@@ -21,10 +22,9 @@ public class Taquin {
 	 */
 	public void init(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
 		this.createFirstTaquin();
-		System.out.println("Vesseurs; oici le taquin originel");
+		System.out.println("Voici le taquin originel");
 		this.affiche();
-
-		this.createSucc();
+		this.createSucc(ouvert, ferme);
 	}
 
 	/**
@@ -70,7 +70,9 @@ public class Taquin {
 	 */
 	private void createFirstTaquin() {
 		int k = 1;
+
 		for (int i = 0; i < 3; i++) {
+
 			for (int j = 0; j < 3; j++) {
 				if (i == 2 && j == 0) {
 					grille[i][j] = new Case(i, j, 0);
@@ -82,6 +84,22 @@ public class Taquin {
 
 			}
 		}
+
+	/*
+		grille[2][1].setVal(8);
+		grille[2][2].setVal(7);
+		*/
+
+		grille[0][0].setVal(6);
+		grille[0][1].setVal(5);
+		grille[0][2].setVal(1);
+		grille[1][0].setVal(7);
+		grille[1][1].setVal(4);
+		grille[1][2].setVal(8);
+		grille[2][0].setVal(2);
+		grille[2][1].setVal(3);
+		grille[2][2].setVal(0);
+		saveCaseVide = grille[2][2];
 	}
 
 	/**
@@ -125,7 +143,7 @@ public class Taquin {
 			//e.printStackTrace();
 		}
 
-		System.out.println("Liste coups jouables : " + listDir);
+		//System.out.println("Liste coups jouables : " + listDir);
 		return listDir;
 
 
@@ -179,54 +197,72 @@ public class Taquin {
 	 * Copie le taquin parent, et cr�e les taquins enfants suite aux diff�rents coups jouables
 	 * Cr�e la liste des successeur
 	 */
-	private void createSucc() {
+	private void createSucc(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
 		//Pour chaque coup jouable, on cr�e le taquin correspondant
 		for (Directions dir : this.listCoupJouable()) {
-			System.out.println("Direction : " + dir);
+			//System.out.println("Direction : " + dir);
 			//On r�cup�re la case correspondante au coup jouable
 			Case c = this.getCaseFromDirection(dir);
 			if (c != null) {
-				//Affiche le Taquin Parent
-				//this.affiche();
 				//Cr�ation du taquin successeur, avec permutation des cases
 				Taquin tSucc = new Taquin();
 				tSucc = tSucc.taquinSucc(this, c);
 
 				//Ajout du taquin � la liste des successeurs
 				this.successeurs.add(tSucc);
-				tSucc.affiche();
 
-				System.out.println("****************");
+				//Ajout du taquin � la liste des etats ouverts
+				if(!tSucc.isEtatFerme(ferme)) {
+					ouvert.add(tSucc);
+				}
+
+				//tSucc.affiche();
+				//System.out.println("****************");
 			}
 		}
 
 	}
-	
-	void comparaison (ArrayList<Taquin> ouvert , ArrayList<Taquin> ferme) {
+
+	void comparaison(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
 		//TODO une fonction qui appel isEtatFerme(O,F) puis traite les cas différents
 		//
 	}
-	
+
 	/**
 	 * Test si le taquin est deja existant dans la liste de taquin fermé
-	 * @param ouvert
+	 *
 	 * @param ferme
 	 * @return
 	 */
-	boolean isEtatFerme(ArrayList<Taquin> ouvert, ArrayList<Taquin> ferme) {
+	boolean isEtatFerme(ArrayList<Taquin> ferme) {
 		for (Taquin t : ferme) {
-			//TODO Vérifier l'egalite
-			if (!gridIsEquals(this.grille, t.grille))
-				return false;
+			if (gridIsEquals(this.grille, t.grille))
+				return true;
+		}
+
+		return false;
+
+	}
+
+	private boolean isSolution() {
+
+		int tmp = 1;
+		for (int i = 0; i < this.grille.length; i++) {
+			for (int j = 0; j < this.grille.length; j++) {
+				if (this.grille[i][j].getVal() != tmp && tmp < (grille.length*grille.length)) {
+					return false;
+				}
+				tmp++;
+			}
 		}
 
 		return true;
-
 	}
-	
+
 	/**
-	 * Permet de comparer les grilles de deux taquins pour savoir si elles sont 
+	 * Permet de comparer les grilles de deux taquins pour savoir si elles sont
 	 * égales
+	 *
 	 * @param grille
 	 * @param grille2
 	 * @return
@@ -271,5 +307,41 @@ public class Taquin {
 		this.saveCaseVide = saveCaseVide;
 	}
 
+	public ArrayList<Taquin> getSuccesseurs() {
+		return this.successeurs;
+	}
+
+	/**
+	 * @param listeEtatOuvert
+	 * @param listeEtatFerme
+	 * @return
+	 */
+	public boolean routine(ArrayList<Taquin> listeEtatOuvert, ArrayList<Taquin> listeEtatFerme , int i) {
+
+
+		if (!listeEtatOuvert.isEmpty()) {
+			Taquin t = listeEtatOuvert.get(0);
+			System.out.println(i);
+		t.affiche();
+
+			if (t.isSolution()) {
+					System.out.println("\nVoici la solution, pronfondeur"+t.getProfondeur()+" : ");
+					t.affiche();
+					return true;
+				} else if (t.isEtatFerme(listeEtatFerme)) {
+					listeEtatOuvert.remove(0);
+					return t.routine(listeEtatOuvert, listeEtatFerme,i+1);
+				} else {
+					t.createSucc(listeEtatOuvert, listeEtatFerme);
+					listeEtatFerme.add(t);
+					listeEtatOuvert.remove(0);
+					return t.routine(listeEtatOuvert, listeEtatFerme,i+1);
+				}
+		}
+
+
+		return false;
+
+	}
 
 }

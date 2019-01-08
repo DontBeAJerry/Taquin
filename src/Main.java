@@ -10,12 +10,25 @@ public class Main {
 
 		//Taquin à resoudre, etat initiale
 		Taquin t = new Taquin();
-		listeEtatOuvert.add(t);
-		t.init(listeEtatOuvert, listeEtatFerme);
 
-		System.out.println(t.isEtatFerme(listeEtatOuvert,listeEtatFerme));
+		//Todo Vérifier Taquin Init n'est pas solution
+
+		t.init(listeEtatOuvert, listeEtatFerme);
+		listeEtatFerme.add(t);
+
+		System.out.println(t.isEtatFerme(listeEtatFerme));
+
+
+		if(t.routine(listeEtatOuvert, listeEtatFerme,0)){
+			System.out.println("Ca marche");
+		}else{
+			System.out.println("Ca marche pas :(");
+		}
 
 
 	}
+
+
+
 
 }
