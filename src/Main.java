@@ -13,42 +13,26 @@ public class Main {
 		t.init(listeEtatOuvert, listeEtatFerme);
 		listeEtatOuvert.add(t);
 
-        int i=0;
-        long debut = System.currentTimeMillis();
-        long tmp = System.currentTimeMillis();
 
-
-        System.out.println("Veuillez Patienter");
-        try{
-            while(!listeEtatOuvert.isEmpty()) {
-                tmp = Main.printWaiting(tmp, System.currentTimeMillis());
-                Taquin x = listeEtatOuvert.poll();
-                //x.affiche();
-                listeEtatFerme.add(x);
-                x.createSucc(listeEtatOuvert, listeEtatFerme);
-                for(Taquin y : x.getSuccesseurs()){
-                    y.heuristique(listeEtatOuvert, listeEtatFerme);
-                }
-                x.getSuccesseurs().clear();
+		//System.out.println("1");
+		while(!listeEtatOuvert.isEmpty()) {
+			//System.out.println(t.isEtatFerme(listeEtatFerme));
+			Taquin x = listeEtatOuvert.poll();
+			//x.affiche();
+			listeEtatFerme.add(x);
+			x.createSucc(listeEtatOuvert, listeEtatFerme);
+			for(Taquin y : x.getSuccesseurs()){
+			    y.heuristique(listeEtatOuvert, listeEtatFerme);
             }
-            long fin = System.currentTimeMillis()-debut;
-            System.out.println("\nEnd of calcul in "+fin+"ms");
-
-        }catch(OutOfMemoryError e){
-            System.out.println("\n\nErreur, il n'y a plus de memoire disponible :");
-            e.printStackTrace();
-        }
-
+			x.getSuccesseurs().clear();
+		}
+		System.out.println("Fin");
 
 	}
 
-    static long printWaiting(long debut, long tmp){
-        if(tmp - debut > 5000){
-            System.out.println("Veuillez Patienter ...");
-            return tmp;
-        }
 
-        return debut;
-    }
+
+
+
 
 }
