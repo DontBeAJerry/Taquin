@@ -26,6 +26,7 @@ public class Taquin implements Comparable<Taquin>{
 		this.createFirstTaquin();
 		System.out.println("Voici le taquin originel");
 		this.affiche();
+		System.out.println("");
 		//this.createSucc(ouvert, ferme);
 	}
 
@@ -34,8 +35,8 @@ public class Taquin implements Comparable<Taquin>{
 	 */
 	private Taquin taquinSucc(Taquin t, Case c) {
 		Taquin newT = new Taquin();
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < this.grille.length; i++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				newT.grille[i][j] = new Case(t.getCase(i, j));
 			}
 		}
@@ -50,8 +51,8 @@ public class Taquin implements Comparable<Taquin>{
 
 	public void affiche() {
 		System.out.println(" -----------");
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < this.grille.length; i++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				if (this.grille[i][j].getVal() == 0) {
 					System.out.print("|   ");
 				} else {
@@ -74,9 +75,9 @@ public class Taquin implements Comparable<Taquin>{
 	private void createFirstTaquin() {
 		int k = 1;
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < this.grille.length; i++) {
 
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				if (i == 2 && j == 0) {
 					grille[i][j] = new Case(i, j, 0);
 					saveCaseVide = grille[i][j];
@@ -103,6 +104,7 @@ public class Taquin implements Comparable<Taquin>{
 		saveCaseVide = grille[2][2];
 
 		/*
+/*
 		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
 		grille[0][2].setVal(3);
@@ -125,7 +127,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(1);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-	*/	
+	*/
 }
 
 	/**
@@ -267,7 +269,7 @@ public class Taquin implements Comparable<Taquin>{
 
 			}
 		}else{
-			System.out.println("Voici la solution de profondeur "+this.getProfondeur()+" :");
+			System.out.println("\n\nVoici la solution de profondeur "+this.getProfondeur()+" :");
 			this.afficheChemin();
 			ouvert.clear();
 		}
@@ -359,7 +361,7 @@ public class Taquin implements Comparable<Taquin>{
 		return saveCaseVide;
 	}
 
-	private int getProfondeur() {
+	public int getProfondeur() {
 		return profondeur;
 	}
 
