@@ -11,26 +11,21 @@ public class Main {
 
 		//Taquin à resoudre, etat initiale
 		Taquin t = new Taquin();
-
-
-		//Todo Vérifier Taquin Init n'est pas solution
-
 		t.init(listeEtatOuvert, listeEtatFerme);
-		System.out.println(t.getPriority());
-		listeEtatFerme.add(t);
-		int i = 0;
+		listeEtatOuvert.add(t);
 
+		int i = 0;
+		System.out.println("1");
 		//System.out.println(t.isEtatFerme(listeEtatFerme));
 		while(!listeEtatOuvert.isEmpty()) {
 			Taquin x = listeEtatOuvert.poll();
-			if (x.routine(listeEtatOuvert, listeEtatFerme)){
-				x.afficheChemin();
-				listeEtatOuvert.clear();
+			listeEtatFerme.add(x);
+			for(Taquin f : x.getSuccesseurs()){
+				f.createSucc(listeEtatOuvert, listeEtatFerme);
 			}
 
-			i++;
 		}
-
+		System.out.println("Fin");
 
 	}
 
