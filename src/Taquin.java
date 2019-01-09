@@ -1,5 +1,3 @@
-import java.time.Clock;
-import java.util.PriorityQueue;
 import java.util.PriorityQueue;
 
 public class Taquin implements Comparable<Taquin>{
@@ -43,6 +41,7 @@ public class Taquin implements Comparable<Taquin>{
 		}
 		newT.setSaveCaseVide(t.getSaveCaseVide());
 		newT.setProfondeur(t.getProfondeur() + 1);
+		newT.setPriority(newT.heuristiqueChoix(1));
 		newT.permut(c);
 
 		return newT;
@@ -89,7 +88,7 @@ public class Taquin implements Comparable<Taquin>{
 			}
 		}
 		this.pere = null;
-		this.priority = this.heuristiqueMalPlace();
+		this.setPriority(this.heuristiqueChoix(1));
 
 /*
 		grille[0][0].setVal(3);
@@ -102,7 +101,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(2);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-*/
+
 
 		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
@@ -114,7 +113,8 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(5);
 		grille[2][2].setVal(8);
 		saveCaseVide = grille[1][1];
-/*
+
+*/
 		grille[0][0].setVal(2);
 		grille[0][1].setVal(7);
 		grille[0][2].setVal(4);
@@ -125,8 +125,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(1);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-*/
-	}
+}
 
 	/**
 	 * Retourne la liste des coups jouables
@@ -237,36 +236,39 @@ public class Taquin implements Comparable<Taquin>{
 				//Ajout du taquin � la liste des successeurs
 				this.successeurs.add(tSucc);
 				tSucc.pere = this;
-				this.priority = this.heuristiqueMalPlace();
+				this.setPriority(this.heuristiqueChoix(1));
 
 
-				if (!tSucc.isSolution()) {
-					//Ajout du taquin � la liste des etats
-					Taquin isFerme = tSucc.isEtatFerme(ferme);
-					Taquin isOuvert = tSucc.isEtatFerme(ouvert);
 
-					if (isFerme == null && isOuvert == null) {
-						ouvert.add(tSucc);
-					} else if (isOuvert != null) {
-						if (isOuvert.getPriority() >= tSucc.getPriority()) {
-							ouvert.remove(isOuvert);
-							ouvert.add(tSucc);
-						}
-					} else if (isFerme != null) {
-						if (isFerme.getPriority() >= tSucc.getPriority()) {
-							ferme.remove(isFerme);
-							ouvert.add(tSucc);
-						}
-
-					}
-				}else{
-					System.out.println("Voici la solution de profondeur "+tSucc.getProfondeur()+" :");
-					tSucc.afficheChemin();
-					ouvert.clear();
-					return;
-				}
 			}
 
+		}
+	}
+
+	public void heuristique(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme){
+		if (!this.isSolution()) {
+			//Ajout du taquin � la liste des etats
+			Taquin isFerme = this.isEtatFerme(ferme);
+			Taquin isOuvert = this.isEtatFerme(ouvert);
+
+			if (isFerme == null && isOuvert == null) {
+				ouvert.add(this);
+			} else if (isOuvert != null) {
+				if (isOuvert.getPriority() >= this.getPriority()) {
+					ouvert.remove(isOuvert);
+					ouvert.add(this);
+				}
+			} else if (isFerme != null) {
+				if (isFerme.getPriority() >= this.getPriority()) {
+					ferme.remove(isFerme);
+					ouvert.add(this);
+				}
+
+			}
+		}else{
+			System.out.println("Voici la solution de profondeur "+this.getProfondeur()+" :");
+			this.afficheChemin();
+			ouvert.clear();
 		}
 	}
 
@@ -275,10 +277,6 @@ public class Taquin implements Comparable<Taquin>{
 			this.pere.afficheChemin();
 		}
 		this.affiche();
-	}
-	void comparaison(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme) {
-		//TODO une fonction qui appel isEtatFerme(O,F) puis traite les cas différents
-		//
 	}
 
 	/**
@@ -392,21 +390,8 @@ public class Taquin implements Comparable<Taquin>{
 		return  this.priority;
 	}
 
-	/**
-	 * @param listeEtatOuvert
-	 * @param listeEtatFerme
-	 * @return
-	 */
-	public boolean routine(PriorityQueue<Taquin> listeEtatOuvert, PriorityQueue<Taquin> listeEtatFerme) {
-		//System.out.println("Profondeur : "+this.getProfondeur()+" : ");
-		if (this.isSolution()) {
-			System.out.println("\nVoici la solution, de profondeur "+this.getProfondeur()+" : ");
-			return true;
-
-			//TODO finir cas heuristique voir annexe perso-etis.ensean.fr
-		}
-
-		return false;
+	public void setPriority(int x){
+		this.priority=x;
 	}
 
 
@@ -421,6 +406,62 @@ public class Taquin implements Comparable<Taquin>{
 	}
 
 	private int heuristiqueMalPlace(){
-		return this.profondeur+this.nbMalPlace();
+		int x = this.profondeur+this.nbMalPlace();
+		return x;
 	}
+
+	private int heuristiqueChoix(int choix){
+		switch(choix){
+			case 1:
+				return this.heuristiqueMalPlace();
+			case 2 :
+				return this.heuristiqueManhantan();
+			default :
+				return 0;
+		}
+	}
+
+	public int heuristiqueManhantan(){
+		int value[] = {1,2,3,4,5,6,7,8,0};
+		int index = 0;
+		int manhatan = 0;
+		//Parcourt de la solution
+		for(int i = 0; i<this.grille.length;i++){
+			for(int j=0; j<this.grille.length; j++){
+				int x = 0;
+				int y = 0;
+				boolean trouve = false;
+
+				while(x < this.grille.length && !trouve){
+					while(y < this.grille.length && !trouve){
+						if (this.grille[x][y].getVal() == value[index]) {
+							trouve = true;
+							manhatan= manhatan+distanceManhatan(x,y,i,j);
+						}
+						y++;
+					}
+					x++;
+				}
+			index++;
+			}
+
+		}
+
+		return manhatan;
+	}
+
+	private int distanceManhatan(int x, int y, int i, int j){
+		return Math.abs(x-i) + Math.abs(y-j);
+	}
+
+	private void test(){
+		//case solution[] = { (0,0),()	};
+
+		for(int i=1; i<this.grille.length;i++){
+
+		}
+	}
+
 }
+
+
