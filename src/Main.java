@@ -18,11 +18,13 @@ public class Main {
 		while(!listeEtatOuvert.isEmpty()) {
 			//System.out.println(t.isEtatFerme(listeEtatFerme));
 			Taquin x = listeEtatOuvert.poll();
+			//x.affiche();
 			listeEtatFerme.add(x);
 			x.createSucc(listeEtatOuvert, listeEtatFerme);
 			for(Taquin y : x.getSuccesseurs()){
 			    y.heuristique(listeEtatOuvert, listeEtatFerme);
             }
+			x.getSuccesseurs().clear();
 		}
 		System.out.println("Fin");
 

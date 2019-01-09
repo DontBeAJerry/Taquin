@@ -41,7 +41,7 @@ public class Taquin implements Comparable<Taquin>{
 		}
 		newT.setSaveCaseVide(t.getSaveCaseVide());
 		newT.setProfondeur(t.getProfondeur() + 1);
-		newT.setPriority(newT.heuristiqueChoix(1));
+		newT.setPriority(newT.heuristiqueChoix(2));
 		newT.permut(c);
 
 		return newT;
@@ -88,9 +88,9 @@ public class Taquin implements Comparable<Taquin>{
 			}
 		}
 		this.pere = null;
-		this.setPriority(this.heuristiqueChoix(1));
+		this.setPriority(this.heuristiqueChoix(2));
 
-/*
+
 		grille[0][0].setVal(3);
 		grille[0][1].setVal(4);
 		grille[0][2].setVal(8);
@@ -102,7 +102,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
 
-
+		/*
 		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
 		grille[0][2].setVal(3);
@@ -114,7 +114,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][2].setVal(8);
 		saveCaseVide = grille[1][1];
 
-*/
+
 		grille[0][0].setVal(2);
 		grille[0][1].setVal(7);
 		grille[0][2].setVal(4);
@@ -125,6 +125,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(1);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
+	*/	
 }
 
 	/**
@@ -236,7 +237,7 @@ public class Taquin implements Comparable<Taquin>{
 				//Ajout du taquin � la liste des successeurs
 				this.successeurs.add(tSucc);
 				tSucc.pere = this;
-				this.setPriority(this.heuristiqueChoix(1));
+				this.setPriority(this.heuristiqueChoix(2));
 
 
 
@@ -254,12 +255,12 @@ public class Taquin implements Comparable<Taquin>{
 			if (isFerme == null && isOuvert == null) {
 				ouvert.add(this);
 			} else if (isOuvert != null) {
-				if (isOuvert.getPriority() >= this.getPriority()) {
+				if (isOuvert.getPriority() > this.getPriority()) {
 					ouvert.remove(isOuvert);
 					ouvert.add(this);
 				}
 			} else if (isFerme != null) {
-				if (isFerme.getPriority() >= this.getPriority()) {
+				if (isFerme.getPriority() > this.getPriority()) {
 					ferme.remove(isFerme);
 					ouvert.add(this);
 				}
@@ -447,7 +448,7 @@ public class Taquin implements Comparable<Taquin>{
 
 		}
 
-		return manhatan;
+		return this.getProfondeur()+manhatan;
 	}
 
 	private int distanceManhatan(int x, int y, int i, int j){

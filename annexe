@@ -1,2 +1,9 @@
 Pour le TODO de routine
 https://perso-etis.ensea.fr/neurocyber/Videos/cours_master/TP_IA_M2/AEtoile.pdf
+
+J'ai ajouté la profondeur à l'heuristique de manhatan, car sans la profondeur un taquin de profondeur 17 
+avec la meme grille que profondeur 5 restait dans la liste ouverte.
+
+J'ai ajouté le clear de la liste de successeur qui devient inutile apres leur ajout en liste ouverte et qui prenne enormement de mémoire.
+
+Le tout fonctionne sur les deux taquins
