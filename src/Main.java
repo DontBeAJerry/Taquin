@@ -8,7 +8,6 @@ public class Main {
 
         PriorityQueue<Taquin> listeEtatOuvert = new PriorityQueue<Taquin>();
         PriorityQueue<Taquin> listeEtatFerme = new PriorityQueue<>();
-
 		//Taquin à resoudre, etat initiale
 		Taquin t = new Taquin();
 		t.init(listeEtatOuvert, listeEtatFerme);
@@ -16,14 +15,12 @@ public class Main {
 
 		int i = 0;
 		System.out.println("1");
-		//System.out.println(t.isEtatFerme(listeEtatFerme));
 		while(!listeEtatOuvert.isEmpty()) {
+			//System.out.println(t.isEtatFerme(listeEtatFerme));
 			Taquin x = listeEtatOuvert.poll();
 			listeEtatFerme.add(x);
-			for(Taquin f : x.getSuccesseurs()){
-				f.createSucc(listeEtatOuvert, listeEtatFerme);
-			}
-
+			x.createSucc(listeEtatOuvert, listeEtatFerme);
+			x.affiche();
 		}
 		System.out.println("Fin");
 

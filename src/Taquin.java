@@ -15,6 +15,7 @@ public class Taquin implements Comparable<Taquin>{
 
 	Taquin() {
 		this.profondeur = 0;
+		this.priority = 0;
 		this.grille = new Case[3][3];
 		this.successeurs = new PriorityQueue<Taquin>();
 	}
@@ -27,7 +28,7 @@ public class Taquin implements Comparable<Taquin>{
 		this.createFirstTaquin();
 		System.out.println("Voici le taquin originel");
 		this.affiche();
-		this.createSucc(ouvert, ferme);
+		//this.createSucc(ouvert, ferme);
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
 */
-		/*
+
 		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
 		grille[0][2].setVal(3);
@@ -113,19 +114,18 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(5);
 		grille[2][2].setVal(8);
 		saveCaseVide = grille[1][1];
-*/
-
-		grille[0][0].setVal(4);
-		grille[0][1].setVal(8);
-		grille[0][2].setVal(5);
+/*
+		grille[0][0].setVal(2);
+		grille[0][1].setVal(7);
+		grille[0][2].setVal(4);
 		grille[1][0].setVal(3);
 		grille[1][1].setVal(6);
-		grille[1][2].setVal(2);
-		grille[2][0].setVal(7);
+		grille[1][2].setVal(8);
+		grille[2][0].setVal(5);
 		grille[2][1].setVal(1);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-
+*/
 	}
 
 	/**
@@ -378,6 +378,14 @@ public class Taquin implements Comparable<Taquin>{
 
 	public PriorityQueue<Taquin> getSuccesseurs() {
 		return this.successeurs;
+	}
+
+	public void setSuccesseurs(PriorityQueue<Taquin> successeurs) {
+		this.successeurs = successeurs;
+	}
+
+	public void addSuccesseur(Taquin succ){
+		this.successeurs.add(succ);
 	}
 
 	public int getPriority(){
