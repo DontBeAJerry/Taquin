@@ -9,7 +9,7 @@ public class Taquin implements Comparable<Taquin>{
 	private PriorityQueue<Taquin> successeurs;
 	private int profondeur;
 	private Case saveCaseVide;
-	int priority;
+	private int priority;
 	Taquin pere;
 
 
@@ -101,7 +101,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(2);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-
+*/
 		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
 		grille[0][2].setVal(3);
@@ -112,8 +112,8 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(5);
 		grille[2][2].setVal(8);
 		saveCaseVide = grille[1][1];
-	*/
 
+/*
 		grille[0][0].setVal(4);
 		grille[0][1].setVal(8);
 		grille[0][2].setVal(5);
@@ -124,7 +124,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(1);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-
+*/
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class Taquin implements Comparable<Taquin>{
 				this.priority = this.heuristiqueMalPlace();
 
 				//Ajout du taquin � la liste des etats ouverts
-				if(!tSucc.isEtatFerme(ferme))
+				if(tSucc.isEtatFerme(ferme) != -1)
 					ouvert.add(tSucc);
 
 				//tSucc.affiche();
@@ -266,13 +266,13 @@ public class Taquin implements Comparable<Taquin>{
 	 * @param ferme
 	 * @return
 	 */
-	boolean isEtatFerme(PriorityQueue<Taquin> ferme) {
+	int isEtatFerme(PriorityQueue<Taquin> ferme) {
 		for (Taquin t : ferme) {
 			if (gridIsEquals(this.grille, t.grille))
-				return true;
+				return this.heuristiqueMalPlace();
 		}
 
-		return false;
+		return -1;
 
 	}
 
@@ -297,7 +297,7 @@ public class Taquin implements Comparable<Taquin>{
 		int compteur = 0;
 		for (int i = 0; i < this.grille.length; i++) {
 			for (int j = 0; j < this.grille.length; j++) {
-				if (this.grille[i][j].getVal() != tmp && tmp < (grille.length*grille.length)) {
+				if (this.grille[i][j].getVal() != tmp && tmp < (grille.length*grille.length) && this.grille[i][j].getVal()!=0) {
 					compteur++;
 				}
 				tmp++;
@@ -359,6 +359,10 @@ public class Taquin implements Comparable<Taquin>{
 		return this.successeurs;
 	}
 
+	public int getPriority(){
+		return  this.priority;
+	}
+
 	/**
 	 * @param listeEtatOuvert
 	 * @param listeEtatFerme
@@ -367,16 +371,26 @@ public class Taquin implements Comparable<Taquin>{
 	public boolean routine(PriorityQueue<Taquin> listeEtatOuvert, PriorityQueue<Taquin> listeEtatFerme) {
 		//System.out.println("Profondeur : "+this.getProfondeur()+" : ");
 		if (this.isSolution()) {
-			System.out.println("\nVoici la solution, de profondeur "+this.getProfondeur()+" : ");
+			System.out.println("\nVoici la solution, de profondeur " + this.getProfondeur() + " : ");
 			return true;
-		} else if (!this.isEtatFerme(listeEtatFerme) && !this.isEtatFerme(listeEtatOuvert)) {
+		}
+		int ferme = this.isEtatFerme(listeEtatFerme);
+		int ouvert = this.isEtatFerme(listeEtatOuvert);
+
+		if (ferme == -1 && ouvert == -1) {
 			this.createSucc(listeEtatOuvert, listeEtatFerme);
 			listeEtatFerme.add(this);
 			//TODO finir cas heuristique voir annexe perso-etis.ensean.fr
+		}else if(ouvert != -1 && ferme == -1){
+			if( ferme < this.getPriority()){
+
+			}
 		}
 
 		return false;
 	}
+
+
 
 	@Override
 	public int compareTo(Taquin o) {

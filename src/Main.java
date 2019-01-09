@@ -16,6 +16,7 @@ public class Main {
 		//Todo Vérifier Taquin Init n'est pas solution
 
 		t.init(listeEtatOuvert, listeEtatFerme);
+		System.out.println(t.getPriority());
 		listeEtatFerme.add(t);
 		int i = 0;
 
