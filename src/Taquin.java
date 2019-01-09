@@ -239,7 +239,7 @@ public class Taquin implements Comparable<Taquin>{
 				this.priority = this.heuristiqueMalPlace();
 
 				//Ajout du taquin � la liste des etats ouverts
-				if(tSucc.isEtatFerme(ferme) != -1)
+				if(!tSucc.isEtatFerme(ferme))
 					ouvert.add(tSucc);
 
 				//tSucc.affiche();
@@ -266,13 +266,13 @@ public class Taquin implements Comparable<Taquin>{
 	 * @param ferme
 	 * @return
 	 */
-	int isEtatFerme(PriorityQueue<Taquin> ferme) {
+	boolean isEtatFerme(PriorityQueue<Taquin> ferme) {
 		for (Taquin t : ferme) {
 			if (gridIsEquals(this.grille, t.grille))
-				return this.heuristiqueMalPlace();
+				return true;
 		}
 
-		return -1;
+		return false;
 
 	}
 
@@ -371,25 +371,16 @@ public class Taquin implements Comparable<Taquin>{
 	public boolean routine(PriorityQueue<Taquin> listeEtatOuvert, PriorityQueue<Taquin> listeEtatFerme) {
 		//System.out.println("Profondeur : "+this.getProfondeur()+" : ");
 		if (this.isSolution()) {
-			System.out.println("\nVoici la solution, de profondeur " + this.getProfondeur() + " : ");
+			System.out.println("\nVoici la solution, de profondeur "+this.getProfondeur()+" : ");
 			return true;
-		}
-		int ferme = this.isEtatFerme(listeEtatFerme);
-		int ouvert = this.isEtatFerme(listeEtatOuvert);
-
-		if (ferme == -1 && ouvert == -1) {
+		} else if (!this.isEtatFerme(listeEtatFerme) && !this.isEtatFerme(listeEtatOuvert)) {
 			this.createSucc(listeEtatOuvert, listeEtatFerme);
 			listeEtatFerme.add(this);
 			//TODO finir cas heuristique voir annexe perso-etis.ensean.fr
-		}else if(ouvert != -1 && ferme == -1){
-			if( ferme < this.getPriority()){
-
-			}
 		}
 
 		return false;
 	}
-
 
 
 	@Override
