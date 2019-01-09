@@ -14,7 +14,7 @@ public class Taquin implements Comparable<Taquin>{
 	Taquin() {
 		this.profondeur = 0;
 		this.priority = 0;
-		this.grille = new Case[3][3];
+		this.grille = new Case[4][4];
 		this.successeurs = new PriorityQueue<Taquin>();
 	}
 
@@ -34,8 +34,8 @@ public class Taquin implements Comparable<Taquin>{
 	 */
 	private Taquin taquinSucc(Taquin t, Case c) {
 		Taquin newT = new Taquin();
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < this.grille.length; i++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				newT.grille[i][j] = new Case(t.getCase(i, j));
 			}
 		}
@@ -49,18 +49,18 @@ public class Taquin implements Comparable<Taquin>{
 
 
 	public void affiche() {
-		System.out.println(" -----------");
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		System.out.println(" ----------------");
+		for (int i = 0; i < this.grille.length; i++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				if (this.grille[i][j].getVal() == 0) {
 					System.out.print("|   ");
 				} else {
 					System.out.print("| " + this.grille[i][j].getVal() + " ");
 				}
 
-				if (j == 2) {
+				if (j == 3) {
 					System.out.println("|");
-					System.out.println(" -----------");
+					System.out.println(" ----------------");
 				}
 
 			}
@@ -74,9 +74,9 @@ public class Taquin implements Comparable<Taquin>{
 	private void createFirstTaquin() {
 		int k = 1;
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < this.grille.length; i++) {
 
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				if (i == 2 && j == 0) {
 					grille[i][j] = new Case(i, j, 0);
 					saveCaseVide = grille[i][j];
@@ -90,7 +90,7 @@ public class Taquin implements Comparable<Taquin>{
 		this.pere = null;
 		this.setPriority(this.heuristiqueChoix(2));
 
-
+		/*
 		grille[0][0].setVal(3);
 		grille[0][1].setVal(4);
 		grille[0][2].setVal(8);
@@ -101,19 +101,26 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(2);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-
-		/*
+*/
+		
 		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
 		grille[0][2].setVal(3);
-		grille[1][0].setVal(4);
-		grille[1][1].setVal(0);
-		grille[1][2].setVal(6);
-		grille[2][0].setVal(7);
-		grille[2][1].setVal(5);
-		grille[2][2].setVal(8);
-		saveCaseVide = grille[1][1];
-
+		grille[0][3].setVal(4);
+		grille[1][0].setVal(5);
+		grille[1][1].setVal(6);
+		grille[1][2].setVal(7);
+		grille[1][3].setVal(8);
+		grille[2][0].setVal(9);
+		grille[2][1].setVal(10);
+		grille[2][2].setVal(11);
+		grille[2][3].setVal(12);
+		grille[3][0].setVal(0);
+		grille[3][1].setVal(13);
+		grille[3][2].setVal(14);
+		grille[3][3].setVal(15);
+		saveCaseVide = grille[3][0];
+/*
 
 		grille[0][0].setVal(2);
 		grille[0][1].setVal(7);
@@ -423,7 +430,7 @@ public class Taquin implements Comparable<Taquin>{
 	}
 
 	public int heuristiqueManhantan(){
-		int value[] = {1,2,3,4,5,6,7,8,0};
+		int value[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0};
 		int index = 0;
 		int manhatan = 0;
 		//Parcourt de la solution
