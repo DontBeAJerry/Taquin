@@ -296,7 +296,7 @@ public class Taquin implements Comparable<Taquin>{
 
 	}
 
-	private boolean isSolution() {
+	public boolean isSolution() {
 
 		int tmp = 1;
 		for (int i = 0; i < this.grille.length; i++) {

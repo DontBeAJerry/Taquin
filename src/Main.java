@@ -4,7 +4,9 @@ import java.util.PriorityQueue;
 public class Main {
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+        // TODO Vérifier si impossible
+        // TODO Switch pour choix taille taquin
+        // TODO Switch pour choix heuristique
 
         PriorityQueue<Taquin> listeEtatOuvert = new PriorityQueue<Taquin>();
         PriorityQueue<Taquin> listeEtatFerme = new PriorityQueue<>();
@@ -18,16 +20,20 @@ public class Main {
 
         System.out.println("Veuillez Patienter ...");
         try {
-            while (!listeEtatOuvert.isEmpty()) {
-                tmp = Main.printWaiting(tmp, System.currentTimeMillis());
-                Taquin x = listeEtatOuvert.poll();
-                //x.affiche();
-                listeEtatFerme.add(x);
-                x.createSucc(listeEtatOuvert, listeEtatFerme);
-                for (Taquin y : x.getSuccesseurs()) {
-                    y.heuristique(listeEtatOuvert, listeEtatFerme);
+            if(!t.isSolution()) {
+                while (!listeEtatOuvert.isEmpty()) {
+                    tmp = Main.printWaiting(tmp, System.currentTimeMillis());
+                    Taquin x = listeEtatOuvert.poll();
+                    //x.affiche();
+                    listeEtatFerme.add(x);
+                    x.createSucc(listeEtatOuvert, listeEtatFerme);
+                    for (Taquin y : x.getSuccesseurs()) {
+                        y.heuristique(listeEtatOuvert, listeEtatFerme);
+                    }
+                    x.getSuccesseurs().clear();
                 }
-                x.getSuccesseurs().clear();
+            }else{
+                System.out.println("Le taquin initial est déjà solution.");
             }
 
         } catch (
