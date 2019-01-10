@@ -11,10 +11,17 @@ public class Taquin implements Comparable<Taquin>{
 	Taquin pere;
 
 
-	Taquin() {
+	Taquin(int choix) {
 		this.profondeur = 0;
 		this.priority = 0;
-		this.grille = new Case[3][3];
+		switch (choix){
+			case 3 :
+				this.grille = new Case[3][3];
+				break;
+			case 4 :
+				this.grille = new Case[4][4];
+				break;
+		}
 		this.successeurs = new PriorityQueue<Taquin>();
 	}
 
@@ -22,8 +29,8 @@ public class Taquin implements Comparable<Taquin>{
 	 * Initialisation du premier taquin
 	 * Et lancement de la création des successeurs
 	 */
-	public void init(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme) {
-		this.createFirstTaquin();
+	public void init(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme, int choix) {
+		this.createFirstTaquin(choix);
 		System.out.println("Voici le taquin originel");
 		this.affiche();
 		//this.createSucc(ouvert, ferme);
@@ -32,16 +39,16 @@ public class Taquin implements Comparable<Taquin>{
 	/**
 	 * Copie d'un taquin
 	 */
-	private Taquin taquinSucc(Taquin t, Case c) {
-		Taquin newT = new Taquin();
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+	private Taquin taquinSucc(Taquin t, Case c, int choix) {
+		Taquin newT = new Taquin(this.grille.length);
+		for (int i = 0; i < this.grille.length; i++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				newT.grille[i][j] = new Case(t.getCase(i, j));
 			}
 		}
 		newT.setSaveCaseVide(t.getSaveCaseVide());
 		newT.setProfondeur(t.getProfondeur() + 1);
-		newT.setPriority(newT.heuristiqueChoix(2));
+		newT.setPriority(newT.heuristiqueChoix(choix));
 		newT.permut(c);
 
 		return newT;
@@ -50,8 +57,8 @@ public class Taquin implements Comparable<Taquin>{
 
 	public void affiche() {
 		System.out.println(" -----------");
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < this.grille.length; i++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				if (this.grille[i][j].getVal() == 0) {
 					System.out.print("|   ");
 				} else {
@@ -71,12 +78,12 @@ public class Taquin implements Comparable<Taquin>{
 	 * Cr�e le premier taquin non al�atoire
 	 * Permet de tester avec un taquin connu � l'avance
 	 */
-	private void createFirstTaquin() {
+	private void createFirstTaquin(int choix) {
 		int k = 1;
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < this.grille.length; i++) {
 
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j < this.grille.length; j++) {
 				if (i == 2 && j == 0) {
 					grille[i][j] = new Case(i, j, 0);
 					saveCaseVide = grille[i][j];
@@ -88,7 +95,7 @@ public class Taquin implements Comparable<Taquin>{
 			}
 		}
 		this.pere = null;
-		this.setPriority(this.heuristiqueChoix(2));
+		this.setPriority(this.heuristiqueChoix(choix));
 
 
 		grille[0][0].setVal(3);
@@ -223,7 +230,7 @@ public class Taquin implements Comparable<Taquin>{
 	 * Copie le taquin parent, et cr�e les taquins enfants suite aux diff�rents coups jouables
 	 * Cr�e la liste des successeur
 	 */
-	public void createSucc(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme) {
+	public void createSucc(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme, int choix) {
 		//Pour chaque coup jouable, on cr�e le taquin correspondant
 		for (Directions dir : this.listCoupJouable()) {
 			//System.out.println("Direction : " + dir);
@@ -231,13 +238,13 @@ public class Taquin implements Comparable<Taquin>{
 			Case c = this.getCaseFromDirection(dir);
 			if (c != null) {
 				//Cr�ation du taquin successeur, avec permutation des cases
-				Taquin tSucc = new Taquin();
-				tSucc = tSucc.taquinSucc(this, c);
+				Taquin tSucc = new Taquin(this.grille.length);
+				tSucc = tSucc.taquinSucc(this, c, choix);
 
 				//Ajout du taquin � la liste des successeurs
 				this.successeurs.add(tSucc);
 				tSucc.pere = this;
-				this.setPriority(this.heuristiqueChoix(2));
+				this.setPriority(this.heuristiqueChoix(choix));
 
 
 
@@ -267,7 +274,7 @@ public class Taquin implements Comparable<Taquin>{
 
 			}
 		}else{
-			System.out.println("Voici la solution de profondeur "+this.getProfondeur()+" :");
+			System.out.println("\n\nVoici la solution de profondeur "+this.getProfondeur()+" :");
 			this.afficheChemin();
 			ouvert.clear();
 		}
@@ -417,6 +424,8 @@ public class Taquin implements Comparable<Taquin>{
 				return this.heuristiqueMalPlace();
 			case 2 :
 				return this.heuristiqueManhantan();
+			case 3 :
+				return 0;
 			default :
 				return 0;
 		}
