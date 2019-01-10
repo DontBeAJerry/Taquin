@@ -6,8 +6,6 @@ public class Main {
 
     public static void main(String[] args) {
         // TODO Vérifier si impossible
-        // TODO Switch pour choix taille taquin
-        // TODO Switch pour choix heuristique
 
         PriorityQueue<Taquin> listeEtatOuvert = new PriorityQueue<Taquin>();
         PriorityQueue<Taquin> listeEtatFerme = new PriorityQueue<>();

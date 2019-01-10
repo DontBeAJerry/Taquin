@@ -1,4 +1,5 @@
 import java.util.PriorityQueue;
+import java.util.Random;
 
 public class Taquin implements Comparable<Taquin>{
 
@@ -30,7 +31,7 @@ public class Taquin implements Comparable<Taquin>{
 	 * Et lancement de la création des successeurs
 	 */
 	public void init(PriorityQueue<Taquin> ouvert, PriorityQueue<Taquin> ferme, int choix) {
-		this.createFirstTaquin(choix);
+		this.createFirstTaquinRandom(choix);
 		System.out.println("Voici le taquin originel");
 		this.affiche();
 		//this.createSucc(ouvert, ferme);
@@ -74,11 +75,34 @@ public class Taquin implements Comparable<Taquin>{
 		}
 	}
 
+	private void createFirstTaquinRandom(int choixHeuristique) {
+
+		int tmp = 0;
+		Random rand = new Random();
+
+
+		while(tmp < Math.pow(this.grille.length,2)) {
+			int i = rand.nextInt(this.grille.length);
+			int j = rand.nextInt(this.grille.length);
+			if (this.grille[i][j] == null) {
+				this.grille[i][j] =  new Case(i, j, tmp);
+				if(tmp==0){
+					saveCaseVide = grille[i][j];
+				}
+				tmp++;
+			}
+		}
+		this.pere = null;
+		this.setPriority(this.heuristiqueChoix(choixHeuristique));
+
+	}
+
+
 	/**
 	 * Cr�e le premier taquin non al�atoire
 	 * Permet de tester avec un taquin connu � l'avance
 	 */
-	private void createFirstTaquin(int choix) {
+	private void createFirstTaquin(int choixHeuristique) {
 		int k = 1;
 
 		for (int i = 0; i < this.grille.length; i++) {
@@ -95,9 +119,10 @@ public class Taquin implements Comparable<Taquin>{
 			}
 		}
 		this.pere = null;
-		this.setPriority(this.heuristiqueChoix(choix));
+		this.setPriority(this.heuristiqueChoix(choixHeuristique));
 
 
+		/*
 		grille[0][0].setVal(3);
 		grille[0][1].setVal(4);
 		grille[0][2].setVal(8);
@@ -109,7 +134,7 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
 
-		/*
+
 		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
 		grille[0][2].setVal(3);
