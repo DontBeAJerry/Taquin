@@ -49,18 +49,21 @@ public class Taquin implements Comparable<Taquin>{
 
 
 	public void affiche() {
-		System.out.println(" ----------------");
+		System.out.println(" -------------------");
 		for (int i = 0; i < this.grille.length; i++) {
 			for (int j = 0; j < this.grille.length; j++) {
 				if (this.grille[i][j].getVal() == 0) {
-					System.out.print("|   ");
-				} else {
+					System.out.print("|    ");
+				} else if(this.grille[i][j].getVal() > 9){
 					System.out.print("| " + this.grille[i][j].getVal() + " ");
+				}
+				else {
+					System.out.print("| " + this.grille[i][j].getVal() + "  ");
 				}
 
 				if (j == 3) {
 					System.out.println("|");
-					System.out.println(" ----------------");
+					System.out.println(" -------------------");
 				}
 
 			}
