@@ -11,7 +11,12 @@ public class Main {
 		//Taquin à resoudre, etat initiale
 		Taquin t = new Taquin();
 		t.init(listeEtatOuvert, listeEtatFerme);
-		listeEtatOuvert.add(t);
+		if(t.taquinPossible()) {
+		System.out.println("c'est bon");
+		}
+		else
+			System.out.println("c'est pas bon");
+	/*	listeEtatOuvert.add(t);
 
 
 		//System.out.println("1");
@@ -26,6 +31,7 @@ public class Main {
             }
 			x.getSuccesseurs().clear();
 		}
+		*/
 		System.out.println("Fin.");
 
 	}

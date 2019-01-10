@@ -61,7 +61,7 @@ public class Taquin implements Comparable<Taquin>{
 					System.out.print("| " + this.grille[i][j].getVal() + "  ");
 				}
 
-				if (j == 3) {
+				if (j == this.grille.length-1) {
 					System.out.println("|");
 					System.out.println(" -------------------");
 				}
@@ -69,6 +69,8 @@ public class Taquin implements Comparable<Taquin>{
 			}
 		}
 	}
+
+
 
 	/**
 	 * Cr�e le premier taquin non aleatoire
@@ -104,15 +106,15 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(2);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-*/
-		
+		 */
+
 		grille[0][0].setVal(1);
 		grille[0][1].setVal(2);
 		grille[0][2].setVal(3);
 		grille[0][3].setVal(4);
 		grille[1][0].setVal(5);
-		grille[1][1].setVal(6);
-		grille[1][2].setVal(7);
+		grille[1][1].setVal(7);
+		grille[1][2].setVal(6);
 		grille[1][3].setVal(8);
 		grille[2][0].setVal(9);
 		grille[2][1].setVal(10);
@@ -120,10 +122,10 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][3].setVal(12);
 		grille[3][0].setVal(0);
 		grille[3][1].setVal(13);
-		grille[3][2].setVal(14);
-		grille[3][3].setVal(15);
+		grille[3][2].setVal(15);
+		grille[3][3].setVal(14);
 		saveCaseVide = grille[3][0];
-/*
+		/*
 
 		grille[0][0].setVal(2);
 		grille[0][1].setVal(7);
@@ -135,8 +137,8 @@ public class Taquin implements Comparable<Taquin>{
 		grille[2][1].setVal(1);
 		grille[2][2].setVal(0);
 		saveCaseVide = grille[2][2];
-	*/	
-}
+		 */	
+	}
 
 	/**
 	 * Retourne la liste des coups jouables
@@ -193,16 +195,16 @@ public class Taquin implements Comparable<Taquin>{
 		int y = this.getCaseVide().getY();
 
 		switch (dir) {
-			case HAUT:
-				return this.getCase(x - 1, y);
-			case BAS:
-				return this.getCase(x + 1, y);
-			case DROITE:
-				return this.getCase(x, y + 1);
-			case GAUCHE:
-				return this.getCase(x, y - 1);
-			default:
-				return null;
+		case HAUT:
+			return this.getCase(x - 1, y);
+		case BAS:
+			return this.getCase(x + 1, y);
+		case DROITE:
+			return this.getCase(x, y + 1);
+		case GAUCHE:
+			return this.getCase(x, y - 1);
+		default:
+			return null;
 
 		}
 	}
@@ -224,7 +226,7 @@ public class Taquin implements Comparable<Taquin>{
 		this.grille[c.getX()][c.getY()].setVal(0);
 		this.grille[saveCaseVide.getX()][saveCaseVide.getY()].setVal(tmp.getVal());
 		saveCaseVide = this.grille[c.getX()][c.getY()] ;
-		*/
+		 */
 	}
 
 
@@ -423,12 +425,12 @@ public class Taquin implements Comparable<Taquin>{
 
 	private int heuristiqueChoix(int choix){
 		switch(choix){
-			case 1:
-				return this.heuristiqueMalPlace();
-			case 2 :
-				return this.heuristiqueManhantan();
-			default :
-				return 0;
+		case 1:
+			return this.heuristiqueMalPlace();
+		case 2 :
+			return this.heuristiqueManhantan();
+		default :
+			return 0;
 		}
 	}
 
@@ -453,7 +455,7 @@ public class Taquin implements Comparable<Taquin>{
 					}
 					x++;
 				}
-			index++;
+				index++;
 			}
 
 		}
@@ -472,6 +474,49 @@ public class Taquin implements Comparable<Taquin>{
 
 		}
 	}
+
+	public boolean taquinPossible() {
+		int t[] = new int[this.grille.length*this.grille.length];
+		int x = 0, nb_inversion = 0;
+		for(int i = 0; i<this.grille.length;i++){
+			for(int j=0; j<this.grille.length; j++){
+				t[x] = this.grille[i][j].getVal();
+				x++;
+			}
+		}
+		for(int i=0; i<this.grille.length*this.grille.length-1; i++)
+		{
+			if(t[i]==0 && i!=this.grille.length*this.grille.length-1){
+				invers(t,i,this.grille.length*this.grille.length-1);
+			}
+		}
+		boolean permut = true;
+		do{
+			permut = false;
+			for(int i=0; i<this.grille.length*this.grille.length-2; i++){
+				if(t[i] > t[i+1]){
+					invers(t,i,i+1);
+					nb_inversion++;
+					permut = true;
+				}
+			}
+		}while(permut == true);
+		
+		for(int i = 0; i<this.grille.length*this.grille.length;i++){
+				System.out.println(t[i]);
+			}
+		if(nb_inversion%2 == 0)
+			return true;
+		else
+			return false;
+	}
+
+	private void invers(int[] t, int i , int j) {
+		int x = t[i];
+		t[i] = t[j];
+		t[j] = x;
+	}
+
 
 }
 
