@@ -26,7 +26,7 @@ public class Main {
             }
 			x.getSuccesseurs().clear();
 		}
-		System.out.println("Fin");
+		System.out.println("Fin.");
 
 	}
 

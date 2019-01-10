@@ -71,7 +71,7 @@ public class Taquin implements Comparable<Taquin>{
 	}
 
 	/**
-	 * Cr�e le premier taquin non al�atoire
+	 * Cr�e le premier taquin non aleatoire
 	 * Permet de tester avec un taquin connu � l'avance
 	 */
 	private void createFirstTaquin() {
